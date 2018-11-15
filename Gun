@@ -1,0 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Gun : MonoBehaviour {
+
+	public float range = 1000.0f;    //Maximum range bullets travel
+	public int bulletsPerMag = 30;	//Magazine capacity
+	public int bulletsLeft = 120;	//Total bullets
+
+	public int currentBullets;	//Bullets in the current magazine
+
+	public Transform shootPoint;	//Point bullets are shot out of
+
+	public float fireRate = 0.1f;	//Rate bullets shoot when holding down the fire button
+	float fireTimer;	//Time counter for fire rate
+
+	// Use this for initialization
+	void Start() {
+
+		currentBullets = bulletsPerMag;
+	}
+
+	// Update is called once per frame
+	void Update() {
+
+		if (Input.GetButton("Fire1"))
+		{
+			Fire();	//Fire gun when fire button is pressed or held
+		}
+		if (fireTimer < fireRate)
+			fireTimer += Time.deltaTime;	//Add to time counter
+	}
+
+	private void Fire()
+	{
+		if (fireTimer < fireRate) return;
+		Debug.Log("Fire!");
+
+
+		RaycastHit hit;
+
+		if(Physics.Raycast(shootPoint.position, shootPoint.transform.forward, out hit, range))
+		{
+			Debug.Log(hit.transform.name + "found");
+		}
+
+		currentBullets--;
+		fireTimer = 0.0f;	//Reset fire timer
+	}
+}
